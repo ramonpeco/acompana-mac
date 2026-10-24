@@ -86,7 +86,7 @@ class Regime:
 REGIMES = {
     "neutral": Regime(),
     "favorable": Regime("favorable", drift=0.00004, vol=0.010, rug_prob=0.08, skill_mean=0.65, skill_redraw=0.01),
-    "unfavorable": Regime("unfavorable", drift=-0.00006, vol=0.016, rug_prob=0.30, skill_mean=0.35, skill_redraw=0.25),
+    "unfavorable": Regime("unfavorable", drift=-0.00006, vol=0.016, rug_prob=0.30, skill_mean=0.15, skill_redraw=0.25),
 }
 
 
@@ -161,7 +161,7 @@ class SandboxWorld:
                     continue
                 if r.random() < g.skill_redraw:
                     skill = min(1.0, max(0.0, r.gauss(g.skill_mean, 0.22)))
-                hold = r.randint(20, 600)
+                hold = r.randint(10, 240)
                 exit_step = min(step + hold, self.n_steps - 1)
                 tok = r.choice(live)
                 if r.random() < skill:  # informed: choose the live token with best forward return
@@ -185,7 +185,7 @@ class SandboxWorld:
                 self.trades.append(
                     SynthTrade(wallet, tok.address, exit_step, "SELL", rest, rest * px / self.sol_price, fake_address(f"sig{wallet}{k}s"))
                 )
-                step = exit_step + r.randint(30, 900)
+                step = exit_step + r.randint(10, 300)
         self.trades.sort(key=lambda t: t.step)
 
     # ---------- queries ----------

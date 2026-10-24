@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #07090d;
+  --color-panel: #0d1117;
+  --color-edge: #1c2430;
+  --color-up: #22c55e;
+  --color-down: #ef4444;
+  --color-accent: #f59e0b;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+html, body, #root { height: 100%; }
+body { font-family: Inter, system-ui, sans-serif; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+table { border-collapse: collapse; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #1c2430; border-radius: 4px; }

@@ -1,0 +1,1 @@
+{"root":["./src/api.ts","./src/main.tsx","./src/components/ui.tsx","./src/pages/Agent.tsx","./src/pages/Backtest.tsx","./src/pages/CopyTrading.tsx","./src/pages/Dashboard.tsx","./src/pages/Login.tsx","./src/pages/Risk.tsx","./src/pages/Scanner.tsx","./src/pages/TraderDetail.tsx","./src/pages/Traders.tsx","./vite.config.ts"],"version":"5.9.3"}

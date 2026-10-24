@@ -367,7 +367,11 @@ class Backtester:
                 t += timedelta(hours=1)
             notes.append("Referencia: comprar y mantener SOL durante el periodo.")
         else:
-            curve = [(start, cfg.initial_capital), (end, cfg.initial_capital)]
+            curve = []
+            t = start
+            while t <= end:
+                curve.append((t, cfg.initial_capital))
+                t += timedelta(hours=1)
             notes.append("Sin serie de precios de SOL: la referencia es mantener efectivo (0%).")
         final = curve[-1][1] if curve else cfg.initial_capital
         return self._summarize(spec, start, end, curve, final, [], 1 if p0 else 0, 0, 0.0, 0.0,
@@ -390,13 +394,13 @@ class Backtester:
             prev = daily[dk]
         vol = statistics.stdev(rets) if len(rets) >= 2 else None
         sharpe = sortino = None
-        if len(rets) >= 10 and vol and vol > 0:
+        if len(rets) >= 14 and vol and vol > 0:
             sharpe = statistics.fmean(rets) / vol * math.sqrt(365)
             downs = [r for r in rets if r < 0]
             dd = math.sqrt(sum(r * r for r in downs) / len(rets)) if downs else 0
             sortino = statistics.fmean(rets) / dd * math.sqrt(365) if dd > 0 else None
-        elif len(rets) < 10:
-            notes.append("Menos de 10 días: Sharpe/Sortino no calculados.")
+        elif len(rets) < 14:
+            notes.append("Menos de 14 días: Sharpe/Sortino no calculados (muestra insuficiente).")
         wins = [p for p in closed if p > 0]
         losses = [-p for p in closed if p <= 0]
         pf = (sum(wins) / sum(losses)) if losses and sum(losses) > 0 else (None if not wins else 99.0)

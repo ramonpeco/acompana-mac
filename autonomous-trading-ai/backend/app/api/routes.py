@@ -519,9 +519,11 @@ async def run_backtest(body: BacktestIn, session: AsyncSession = Depends(get_ses
     else:
         if body.regime not in ("neutral", "favorable", "unfavorable"):
             raise HTTPException(422, "régimen inválido")
-        world = await asyncio.to_thread(SandboxWorld, seed=body.seed, history_days=0, horizon_days=body.days,
-                                        start=datetime(2026, 1, 1, tzinfo=UTC), regime=body.regime, n_traders=40)
+        # 7 days of prior history are used only for warm-up ranking (no trading), then `days` are evaluated
+        world = await asyncio.to_thread(SandboxWorld, seed=body.seed, history_days=7, horizon_days=body.days,
+                                        start=datetime(2026, 1, 8, tzinfo=UTC), regime=body.regime, n_traders=40)
         data = SyntheticDataset(world)
+        cfg.warmup_days = 7
     res = await asyncio.to_thread(run_all, data, cfg, body.strategies)
     if body.walk_forward:
         res["walk_forward"] = await asyncio.to_thread(walk_forward, data, cfg)

@@ -1,0 +1,23 @@
+# Optional: run without Docker, against an existing PostgreSQL (see docs/DEPLOYMENT.md).
+[Unit]
+Description=Autonomous Crypto Trading AI (paper trading)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tradingai
+WorkingDirectory=/opt/autonomous-trading-ai/backend
+EnvironmentFile=/opt/autonomous-trading-ai/.env
+Environment=ENVIRONMENT=production
+ExecStartPre=/opt/autonomous-trading-ai/backend/.venv/bin/alembic upgrade head
+ExecStart=/opt/autonomous-trading-ai/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --proxy-headers
+Restart=always
+RestartSec=5
+MemoryMax=900M
+NoNewPrivileges=true
+ProtectSystem=full
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
