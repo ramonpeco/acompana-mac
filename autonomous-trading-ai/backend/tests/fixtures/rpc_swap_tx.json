@@ -1,0 +1,33 @@
+{
+  "slot": 301234567,
+  "blockTime": 1767225600,
+  "meta": {
+    "err": null,
+    "fee": 5000,
+    "preBalances": [2500000000, 2039280, 1000000, 0],
+    "postBalances": [1994995000, 2039280, 1000000, 0],
+    "preTokenBalances": [
+      {"accountIndex": 1, "mint": "MemeMint1111111111111111111111111111111pump", "owner": "PoolOwner11111111111111111111111111111111111",
+       "uiTokenAmount": {"amount": "900000000000", "decimals": 6, "uiAmount": 900000.0, "uiAmountString": "900000"}}
+    ],
+    "postTokenBalances": [
+      {"accountIndex": 1, "mint": "MemeMint1111111111111111111111111111111pump", "owner": "PoolOwner11111111111111111111111111111111111",
+       "uiTokenAmount": {"amount": "880000000000", "decimals": 6, "uiAmount": 880000.0, "uiAmountString": "880000"}},
+      {"accountIndex": 2, "mint": "MemeMint1111111111111111111111111111111pump", "owner": "TraderWa11et111111111111111111111111111111111",
+       "uiTokenAmount": {"amount": "20000000000", "decimals": 6, "uiAmount": 20000.0, "uiAmountString": "20000"}}
+    ],
+    "loadedAddresses": {"writable": [], "readonly": []}
+  },
+  "transaction": {
+    "signatures": ["5igSwapSignature1111111111111111111111111111111111111111111111111111"],
+    "message": {
+      "accountKeys": [
+        {"pubkey": "TraderWa11et111111111111111111111111111111111", "signer": true, "writable": true, "source": "transaction"},
+        {"pubkey": "PoolVault11111111111111111111111111111111111", "signer": false, "writable": true, "source": "transaction"},
+        {"pubkey": "TraderAta111111111111111111111111111111111111", "signer": false, "writable": true, "source": "transaction"},
+        {"pubkey": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", "signer": false, "writable": false, "source": "transaction"}
+      ],
+      "instructions": [{"programId": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", "accounts": [], "data": ""}]
+    }
+  }
+}

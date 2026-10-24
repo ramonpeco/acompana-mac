@@ -1,0 +1,4 @@
+{"data": [{"id": "t1", "type": "trade", "attributes": {"block_number": 1, "tx_hash": "sigA", "tx_from_address": "8ZUczUAUSLdWbHYE3LTmhDhWNH8VtnGKDPzLfbGr5DCa",
+  "from_token_amount": "1.5", "to_token_amount": "1000", "price_from_in_currency_token": "1", "price_to_in_currency_token": "0.0015",
+  "price_from_in_usd": "150", "price_to_in_usd": "0.225", "block_timestamp": "2026-01-01T00:00:00Z", "kind": "buy",
+  "volume_in_usd": "225.0", "from_token_address": "So11111111111111111111111111111111111111112", "to_token_address": "WifxMint111111111111111111111111111111111"}}]}

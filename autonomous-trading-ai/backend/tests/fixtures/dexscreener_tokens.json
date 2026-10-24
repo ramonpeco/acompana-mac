@@ -1,0 +1,16 @@
+[
+  {"chainId": "solana", "dexId": "raydium", "url": "https://dexscreener.com/solana/pairA", "pairAddress": "PairA111111111111111111111111111111111111111",
+   "labels": ["CPMM"], "baseToken": {"address": "MemeMint1111111111111111111111111111111pump", "name": "Meme", "symbol": "MEME"},
+   "quoteToken": {"address": "So11111111111111111111111111111111111111112", "name": "Wrapped SOL", "symbol": "SOL"},
+   "priceNative": "0.0000001", "priceUsd": "0.0000150",
+   "txns": {"m5": {"buys": 10, "sells": 7}, "h1": {"buys": 120, "sells": 95}, "h6": {"buys": 500, "sells": 410}, "h24": {"buys": 2000, "sells": 1800}},
+   "volume": {"m5": 1500.5, "h1": 22000, "h6": 90000, "h24": 350000},
+   "priceChange": {"m5": 1.2, "h1": -3.4, "h6": 12.0, "h24": 45.1},
+   "liquidity": {"usd": 85000.12, "base": 2800000000, "quote": 280},
+   "fdv": 15000000, "marketCap": 15000000, "pairCreatedAt": 1767139200000,
+   "info": {"imageUrl": "x"}, "boosts": {"active": 50}},
+  {"chainId": "solana", "dexId": "pumpswap", "pairAddress": "PairB111111111111111111111111111111111111111",
+   "baseToken": {"address": "MemeMint1111111111111111111111111111111pump", "name": "Meme", "symbol": "MEME"},
+   "quoteToken": {"address": "So11111111111111111111111111111111111111112", "symbol": "SOL"},
+   "priceUsd": "0.0000149", "liquidity": {"usd": 12000}, "volume": {"h24": 9000}, "priceChange": {}, "txns": {}}
+]

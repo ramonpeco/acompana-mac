@@ -1,0 +1,11 @@
+{"data": [{"id": "solana_PoolG11111111111111111111111111111111111", "type": "pool",
+  "attributes": {"address": "PoolG11111111111111111111111111111111111", "name": "WIFX / SOL", "base_token_price_usd": "0.42",
+    "fdv_usd": "420000000", "market_cap_usd": null, "reserve_in_usd": "1500000.5", "pool_created_at": "2025-12-01T10:00:00Z",
+    "price_change_percentage": {"m5": "0.5", "h1": "2.1", "h6": "-1", "h24": "8.8"},
+    "transactions": {"m5": {"buys": 12, "sells": 9, "buyers": 10, "sellers": 8}, "h1": {"buys": 300, "sells": 250}},
+    "volume_usd": {"m5": "5000", "h1": "80000", "h6": "300000", "h24": "1200000"}},
+  "relationships": {"base_token": {"data": {"id": "solana_WifxMint111111111111111111111111111111111", "type": "token"}},
+                    "quote_token": {"data": {"id": "solana_So11111111111111111111111111111111111111112", "type": "token"}},
+                    "dex": {"data": {"id": "raydium", "type": "dex"}}}}],
+ "included": [{"id": "solana_WifxMint111111111111111111111111111111111", "type": "token",
+   "attributes": {"address": "WifxMint111111111111111111111111111111111", "name": "Wifx", "symbol": "WIFX"}}]}
