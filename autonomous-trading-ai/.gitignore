@@ -10,3 +10,4 @@ dist/
 *.db-journal
 backups/
 keystore/
+*.tsbuildinfo
