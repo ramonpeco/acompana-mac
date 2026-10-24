@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, fmtPct, fmtUsd, usePoll } from "../api";
+import { api, ask, notify, fmtPct, fmtUsd, usePoll } from "../api";
 import { Badge, Btn, Card, ErrorBox, Field, inputCls, Stat } from "../components/ui";
 
 const LABELS: Record<string, string> = {
@@ -19,16 +19,20 @@ export default function Risk() {
     if (data && !ov) setOv(data.limits);
   }, [data, ov]);
   const saveProfile = async (profile: string) => {
-    await api("/risk", { method: "PUT", body: { profile, overrides: {} } });
-    setOv(null);
-    reload();
+    try {
+      await api("/risk", { method: "PUT", body: { profile, overrides: {} } });
+      setOv(null);
+      reload();
+    } catch (e: any) {
+      notify(e.message);
+    }
   };
   const save = async () => {
     if (!ov || !data) return;
     const base = data.profiles[data.profile];
     const diff = Object.fromEntries(Object.entries(ov).filter(([k, v]) => base[k] !== v));
     const crit = Object.keys(diff).filter((k) => data.critical_keys.includes(k));
-    if (crit.length && !confirm(`Vas a modificar límites críticos (${crit.join(", ")}). Quedará auditado. ¿Continuar?`)) return;
+    if (crit.length && !ask(`Vas a modificar límites críticos (${crit.join(", ")}). Quedará auditado. ¿Continuar?`)) return;
     try {
       await api("/risk", { method: "PUT", body: { overrides: diff } });
       setMsg("Límites guardados.");
@@ -38,9 +42,13 @@ export default function Risk() {
     }
   };
   const kill = async (active: boolean) => {
-    if (active && !confirm("¿Activar la PARADA DE EMERGENCIA? Se bloquean todas las nuevas entradas.")) return;
-    await api("/risk/kill", { body: { active } });
-    reload();
+    if (active && !ask("¿Activar la PARADA DE EMERGENCIA? Se bloquean todas las nuevas entradas.")) return;
+    try {
+      await api("/risk/kill", { body: { active } });
+      reload();
+    } catch (e: any) {
+      notify(e.message);
+    }
   };
   const c = data?.current;
   return (

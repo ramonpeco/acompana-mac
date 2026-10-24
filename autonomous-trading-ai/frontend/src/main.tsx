@@ -1,8 +1,8 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, NavLink, Route, Routes } from "react-router-dom";
 import "./index.css";
-import { getToken, setToken, usePoll } from "./api";
+import { demoSnapshotAt, getToken, isDemo, setToken, usePoll } from "./api";
 import { Badge } from "./components/ui";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -28,8 +28,24 @@ function Shell() {
   const { data } = usePoll<any>("/dashboard", 15000);
   const [open, setOpen] = useState(false);
   const synthetic = data?.data_label === "synthetic";
+  const [notice, setNotice] = useState<string | null>(null);
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>;
+    const h = (e: Event) => {
+      setNotice((e as CustomEvent).detail);
+      clearTimeout(t);
+      t = setTimeout(() => setNotice(null), 4000);
+    };
+    window.addEventListener("ata-notice", h);
+    return () => window.removeEventListener("ata-notice", h);
+  }, []);
   return (
     <div className="flex min-h-full flex-col">
+      {isDemo && (
+        <div className="bg-sky-600 px-4 py-1 text-center text-xs font-semibold text-white">
+          DEMO DE SOLO LECTURA · instantánea del {demoSnapshotAt?.slice(0, 16).replace("T", " ")} UTC · 3 días de ejecución autónoma simulada
+        </div>
+      )}
       {synthetic && (
         <div className="bg-accent/90 px-4 py-1 text-center text-xs font-semibold text-black">
           MODO SANDBOX · DATOS SINTÉTICOS · los resultados no representan el mercado real
@@ -70,6 +86,9 @@ function Shell() {
           </Routes>
         </main>
       </div>
+      {notice && (
+        <div role="status" className="fixed bottom-4 right-4 z-50 max-w-sm rounded border border-accent/60 bg-panel px-4 py-2 text-sm text-accent shadow-lg">{notice}</div>
+      )}
       <footer className="border-t border-edge px-4 py-1.5 text-center text-[11px] text-slate-600">
         Herramienta de investigación con capital simulado. No es asesoramiento financiero ni garantiza rentabilidad.
       </footer>
@@ -78,13 +97,14 @@ function Shell() {
 }
 
 function App() {
-  const [authed, setAuthed] = useState(!!getToken());
+  const [authed, setAuthed] = useState(isDemo || !!getToken());
   useEffect(() => {
     const h = () => setAuthed(false);
     window.addEventListener("ata-logout", h);
     return () => window.removeEventListener("ata-logout", h);
   }, []);
-  return <BrowserRouter>{authed ? <Shell /> : <Login onLogin={() => setAuthed(true)} />}</BrowserRouter>;
+  const Router = isDemo ? MemoryRouter : BrowserRouter;
+  return <Router>{authed ? <Shell /> : <Login onLogin={() => setAuthed(true)} />}</Router>;
 }
 
 createRoot(document.getElementById("root")!).render(

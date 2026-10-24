@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api, ago, fmtPct, fmtUsd, short, usePoll } from "../api";
+import { api, ask, ago, fmtPct, fmtUsd, short, usePoll } from "../api";
 import { Badge, Btn, Card, ErrorBox, Field, inputCls, Pnl, Table } from "../components/ui";
 
 const MULTS = [0.1, 0.25, 0.5, 1.0];
@@ -27,7 +27,7 @@ export default function CopyTrading() {
     }
   };
   const unfollow = async () => {
-    if (!confirm("¿Dejar de seguir al trader actual? El agente seleccionará otro.")) return;
+    if (!ask("¿Dejar de seguir al trader actual? El agente seleccionará otro.")) return;
     await api("/copy/unfollow", { method: "POST" });
     reload();
   };

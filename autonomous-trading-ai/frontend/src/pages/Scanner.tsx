@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api, ago, fmtNum, fmtPct, fmtPrice, fmtUsd, short, usePoll } from "../api";
+import { api, ago, notify, fmtNum, fmtPct, fmtPrice, fmtUsd, short, usePoll } from "../api";
 import { Badge, Btn, Card, ErrorBox, Field, inputCls, Pnl, Table } from "../components/ui";
 
 const CATS = [
@@ -17,10 +17,20 @@ export default function Scanner() {
   const [sel, setSel] = useState<any>(null);
   const qs = new URLSearchParams({ category: cat, timeframe: tf, chain, ...Object.fromEntries(Object.entries(f).filter(([, v]) => v)) });
   const { data, error, loading } = usePoll<any>(`/scanner?${qs}`, 20000);
-  const open = async (addr: string) => setSel(await api(`/tokens/${addr}`));
+  const open = async (addr: string) => {
+    try {
+      setSel(await api(`/tokens/${addr}`));
+    } catch (e: any) {
+      notify(e.message);
+    }
+  };
   const assess = async (addr: string) => {
-    await api(`/tokens/${addr}/assess`, { method: "POST" });
-    open(addr);
+    try {
+      await api(`/tokens/${addr}/assess`, { method: "POST" });
+      open(addr);
+    } catch (e: any) {
+      notify(e.message);
+    }
   };
   return (
     <div className="space-y-3">

@@ -1,4 +1,4 @@
-import { api, ago, usePoll } from "../api";
+import { api, notify, ago, usePoll } from "../api";
 import { Badge, Btn, Card, ErrorBox, Table } from "../components/ui";
 
 export default function AgentPage() {
@@ -8,7 +8,7 @@ export default function AgentPage() {
     try {
       await api(`/agent/${a}`, { method: "POST" });
     } catch (e: any) {
-      alert(e.message);
+      notify(e.message);
     }
     reload();
   };
@@ -16,7 +16,7 @@ export default function AgentPage() {
     try {
       await api(`/strategies/${id}/${action}`, { method: "POST" });
     } catch (e: any) {
-      alert(e.message);
+      notify(e.message);
     }
     reload();
   };

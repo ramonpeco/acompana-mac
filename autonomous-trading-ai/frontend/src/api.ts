@@ -26,7 +26,52 @@ export class ApiError extends Error {
   }
 }
 
+// ---- read-only demo mode: answers come from an embedded snapshot (no backend) ----
+const DEMO: Record<string, any> | null = (() => {
+  try {
+    const el = typeof document !== "undefined" ? document.getElementById("demo-data") : null;
+    return el ? JSON.parse(el.textContent || "{}") : null;
+  } catch {
+    return null;
+  }
+})();
+export const isDemo = DEMO !== null;
+export const demoSnapshotAt: string | null = DEMO?.["/dashboard"]?.heartbeat ?? null;
+
+function demoAnswer(path: string, opts: { method?: string; body?: any }): any {
+  const method = opts.method ?? (opts.body ? "POST" : "GET");
+  if (path === "/backtest" && method === "POST") {
+    const reg = opts.body?.regime ?? "neutral";
+    const r = DEMO!.__backtest_by_regime?.[reg];
+    if (!r) throw new ApiError(404, "Escenario no disponible en la demo");
+    const keep = new Set<string>(opts.body?.strategies ?? Object.keys(r.results));
+    return { ...r, results: Object.fromEntries(Object.entries<any>(r.results).filter(([k]) => keep.has(k))) };
+  }
+  if (method !== "GET") throw new ApiError(403, "Demo de solo lectura: esta acción requiere el servidor en marcha");
+  if (path in DEMO!) return DEMO![path];
+  const [base, qs] = path.split("?");
+  const q = new URLSearchParams(qs ?? "");
+  if (base === "/scanner") {
+    const key = `/scanner?${new URLSearchParams({ category: q.get("category") ?? "trending", timeframe: q.get("timeframe") ?? "1h", chain: "solana" })}`;
+    const r = DEMO![key];
+    if (!r) throw new ApiError(404, "sin datos");
+    const n = (k: string) => (q.get(k) ? Number(q.get(k)) : null);
+    const rows = r.rows.filter((x: any) =>
+      (n("min_liquidity") == null || (x.liquidity_usd ?? 0) >= n("min_liquidity")!) &&
+      (n("min_volume") == null || (x.volume ?? 0) >= n("min_volume")!) &&
+      (n("min_mcap") == null || (x.market_cap_usd ?? 0) >= n("min_mcap")!) &&
+      (n("max_mcap") == null || (x.market_cap_usd ?? 0) <= n("max_mcap")!));
+    return { ...r, rows, count: rows.length };
+  }
+  if (base === "/positions" || base === "/traders" || base === "/orders") {
+    const alt = Object.keys(DEMO!).find((k) => k.startsWith(base + "?") && (!q.get("status") || k.includes(`status=${q.get("status")}`)));
+    if (alt) return DEMO![alt];
+  }
+  throw new ApiError(404, "No incluido en la instantánea de la demo");
+}
+
 export async function api<T = any>(path: string, opts: { method?: string; body?: unknown } = {}): Promise<T> {
+  if (DEMO) return demoAnswer(path, opts as any) as T;
   const res = await fetch(`/api${path}`, {
     method: opts.method ?? (opts.body ? "POST" : "GET"),
     headers: {
@@ -96,6 +141,10 @@ export function useLiveEvents(max = 50) {
   useEffect(() => {
     let stop = false;
     let retry: ReturnType<typeof setTimeout>;
+    if (DEMO) {
+      setEvents((DEMO["/events?limit=100"] ?? []).slice(0, max).map((e: any) => ({ ...e, type: "event" })));
+      return;
+    }
     const connect = () => {
       const t = getToken();
       if (!t || stop) return;
@@ -137,3 +186,15 @@ export const ago = (iso?: string | null) => {
   if (s < 86400) return `${(s / 3600).toFixed(1)}h`;
   return `${(s / 86400).toFixed(1)}d`;
 };
+
+/** In-page notices (the artifact viewer blocks alert/confirm). */
+export function notify(msg: string) {
+  window.dispatchEvent(new CustomEvent("ata-notice", { detail: msg }));
+}
+export function ask(msg: string): boolean {
+  if (isDemo) {
+    notify("Demo de solo lectura: esta acción requiere el servidor en marcha");
+    return false;
+  }
+  return window.confirm(msg);
+}
