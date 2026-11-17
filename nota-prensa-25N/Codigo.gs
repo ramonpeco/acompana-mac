@@ -424,7 +424,7 @@ function buildBody_() {
     'CONVOCATORIA',
     'Fecha: jueves, 19 de noviembre de 2026',
     'Hora: 11:00 horas',
-    'Lugar: sala de exposiciones de la Escuela de Arte y Superior de Diseño Pedro Almodóvar, Ciudad Real',
+    'Lugar: sala de exposiciones de la Escuela de Arte y Superior de Diseño Pedro Almodóvar, Plaza de la Provincia, 1, Ciudad Real',
     '',
     'El cartel ganador es obra de la alumna María Magdalena Merino Arévalo, bajo el lema «Los tiempos cambian, ' +
     '¿y tú?». Realizado con la técnica del collage, representa un patrón persistente con las palabras «amor, ' +
@@ -459,7 +459,7 @@ function buildBody_() {
     '<tr><td><b>CONVOCATORIA</b><br>' +
     '<b>Fecha:</b> jueves, 19 de noviembre de 2026<br>' +
     '<b>Hora:</b> 11:00 horas<br>' +
-    '<b>Lugar:</b> sala de exposiciones de la Escuela de Arte y Superior de Diseño Pedro Almodóvar, Ciudad Real' +
+    '<b>Lugar:</b> sala de exposiciones de la Escuela de Arte y Superior de Diseño Pedro Almodóvar, Plaza de la Provincia, 1, Ciudad Real' +
     '</td></tr></table>' +
     '<p ' + p + '>El cartel ganador es obra de la alumna <b>María Magdalena Merino Arévalo</b>, bajo el lema ' +
     '«Los tiempos cambian, ¿y tú?». Realizado con la técnica del collage, representa un patrón persistente con ' +
